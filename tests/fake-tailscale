@@ -1,0 +1,17 @@
+#!/bin/sh
+# Fake `tailscale` CLI for tests. Serves a static status JSON and prefs.
+DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+case "$1" in
+  status)
+    cat "$DIR/fixtures/status.json"
+    ;;
+  debug)
+    if [ "${2:-}" = "prefs" ]; then
+      printf '%s\n' '{"ControlURL":"https://headscale.example.com"}'
+    fi
+    ;;
+  ping)
+    printf '%s\n' 'pong from fake-peer'
+    ;;
+esac
+exit 0

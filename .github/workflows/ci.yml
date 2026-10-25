@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Syntax check (plugin + installer)
+        run: |
+          python3 -m py_compile tailnet.10s.py tests/validate_swiftbar.py
+          sh -n install.sh
+      - name: Validate SwiftBar output against fake tailscale
+        run: python3 tests/validate_swiftbar.py
